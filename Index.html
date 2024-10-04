@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Points Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Points Management System</h1>
+        <div>
+            <input type="text" id="profileName" placeholder="Enter Profile Name">
+            <button onclick="createProfile()">Create Profile</button>
+        </div>
+        
+        <h2>Profiles</h2>
+        <ul id="profileList"></ul>
+
+        <div id="profileDetails" style="display: none;">
+            <h2>Profile: <span id="selectedProfileName"></span></h2>
+            <p>Points: <span id="pointsDisplay">0</span></p>
+            <div>
+                <button onclick="updatePoints(5)">Add 5</button>
+                <button onclick="updatePoints(10)">Add 10</button>
+                <button onclick="updatePoints(50)">Add 50</button>
+                <button onclick="updatePoints(100)">Add 100</button>
+                <button onclick="updatePoints(-5)">Subtract 5</button>
+                <button onclick="updatePoints(-10)">Subtract 10</button>
+                <button onclick="updatePoints(-50)">Subtract 50</button>
+                <button onclick="updatePoints(-100)">Subtract 100</button>
+            </div>
+            <button onclick="goBack()">Back to Profiles</button>
+        </div>
+    </div>
+
+    <script>
+        let profiles = {};
+
+        function createProfile() {
+            const profileName = document.getElementById("profileName").value;
+            if (profileName && !profiles[profileName]) {
+                profiles[profileName] = { points: 0 };
+                document.getElementById("profileName").value = ""; // Clear input
+                displayProfiles();
+            } else {
+                alert("Profile already exists or name is empty!");
+            }
+        }
+
+        function displayProfiles() {
+            const profileList = document.getElementById("profileList");
+            profileList.innerHTML = "";
+            for (let name in profiles) {
+                const li = document.createElement("li");
+                li.textContent = name;
+                li.onclick = () => openProfile(name);
+                profileList.appendChild(li);
+            }
+        }
+
+        function openProfile(name) {
+            document.getElementById("selectedProfileName").textContent = name;
+            document.getElementById("pointsDisplay").textContent = profiles[name].points;
+            document.getElementById("profileDetails").style.display = "block";
+            document.querySelector(".container > h2:nth-of-type(2)").style.display = "none"; // Hide profiles header
+            document.getElementById("profileList").style.display = "none"; // Hide profile list
+        }
+
+        function updatePoints(amount) {
+            const profileName = document.getElementById("selectedProfileName").textContent;
+            profiles[profileName].points += amount;
+            document.getElementById("pointsDisplay").textContent = profiles[profileName].points;
+        }
+
+        function goBack() {
+            document.getElementById("profileDetails").style.display = "none";
+            document.querySelector(".container > h2:nth-of-type(2)").style.display = "block"; // Show profiles header
+            document.getElementById("profileList").style.display = "block"; // Show profile list
+        }
+    </script>
+</body>
+</html>
